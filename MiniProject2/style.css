@@ -1,0 +1,98 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+div#container {
+    height: 200vh;
+    max-height: 200vh;
+    overflow: hidden;
+}
+
+figure#chart {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+}
+
+html, body {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Gotham", "Helvetica Neue", Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: rgb(38, 11, 173, 0.8); 
+}
+
+#head {
+    height: 30vh;
+    background-color: rgba(207, 216, 250, 0.5);
+    position:sticky;
+    padding-top: 5%;
+}
+
+h2 {
+    text-align: center;
+    color: rgb(38, 11, 173, 0.8); 
+}
+
+#notes {
+    height: 60vh;
+    background-color: rgba(207, 216, 250, 0.5);
+    position:sticky;
+}
+
+#flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#viz, #data {
+    width: 50%;
+    background-color: rgba(207, 216, 250, 0.8);
+    margin: 5%;
+    border-radius: 10px;
+    padding-left: 1%;
+    padding-right: 1%;
+    line-height:30px;
+}
+
+#checkboxes {
+    height: 10vh;
+    padding-left: 5%;
+    padding-right: 2.5%;
+}
+
+#checks {
+    font-size: 12px;
+}
+
+.axisLabel {
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.axis {
+    font-size: 10pt;
+}
+
+/* TOOLTIP*/
+    .tooltip {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        visibility: hidden;
+        pointer-events: none;
+        font-family: "Gotham", "Helvetica Neue", Arial, sans-serif;
+        font-size: 14pt;
+        background-color: rgba(201, 189, 189, 0.8);
+        padding: 2px;
+        border-radius: 6px;
+    }

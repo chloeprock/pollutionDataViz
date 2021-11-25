@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mini Project 2</title>
+        <link rel="stylesheet" href="./style.css">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+                
+            <div id="head">
+                <h1>American Cities by Air Quality and Water Pollution Levels</h1> 
+            </div>
+
+            <div id="checkboxes">
+
+                <h5>Filter Cities by Pollution Levels</h5>
+
+                <div id="checks">
+                    <input type="checkbox" class="pollution--level" value="bestCities" checked>Lowest Overall Pollution<br>
+                    <input type="checkbox" class="pollution--level" value="worstCities" checked>Highest Overall Pollution<br>
+                    <input type="checkbox" class="pollution--level" value="moderateCities" checked>Moderate Pollution Levels<br>
+                </div>
+            </div>
+
+            <figure id="chart"></figure>
+
+            <div id="notes">
+                <div id="flex">
+                    <div id="data">
+                        <h2>Notes on Data</h2>
+                        <p>
+                            The dataset, "World Cities Air Quality and Water Pollution, 2020" was taken from <a target="blank" href="https://www.kaggle.com/cityapiio/world-cities-air-quality-and-water-polution">kaggle.com</a>
+                            and then filtered for American cities.
+                        </p>
+                        <p>
+                            Air Quality varies from 0 (bad quality) to 100 (top quality).
+                        </p>
+                        <p>
+                            Water Pollution varies from 0 (no pollution) to 100 (extreme pollution). 
+                        </p>
+                    </div>
+
+                    <div id="viz"> 
+                        <h2>Notes on Visualization</h2>
+                        <p>
+                            The filter allows for viewing of the data by 3 different categories:
+                            <ol>
+                                <li>
+                                    Lowest Overall Pollution
+                                </li>
+                                <li>
+                                    Highest Overall Pollution
+                                </li>
+                                <li>
+                                    Moderate Pollution Levels 
+                                </li>
+                            </ol>
+                            The background is colored according to water pollution levels rather than air quality levels, becasue the higher values 
+                            indicate more pollution, and this may not be as intrinsic to understand as the air quality scale, whos numerica values increase as the quality increases. 
+                            Darker circles indicate that more than one city has that exact value for water pollution and air quality. 
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <script src="./script.js"></script>
+    </body>
+</html>
