@@ -25,22 +25,44 @@ d3.csv("./data/SgNumbers.csv").then(function(data) {
 
     console.log(data);
 
-    let filtered_data = data.filter(function(d) {
-            return d.Country === 'United States of America'; 
-    });    
-    
-        console.log(filtered_data);
+    /* Create sets of filtered data for worst, best, and moderate pollution levels */
+
+    const filtered_worst = data.filter(function(d) {
+        return (d.category == 'worstCities'); 
+    });
+
+    console.log(filtered_worst);
+
+    const filtered_best = data.filter(function(d) {
+        return (d.category == 'bestCities');
+    });
+
+    console.log(filtered_best);
+
+    const filtered_moderate = data.filter(function(d) {
+        return (d.category == 'moderateCities');
+    });
+
+    console.log(filtered_moderate);
 
     /* Determine min and max values */
 
     let AirQuality = {
-        min: d3.min(filtered_data, function(d) {return +d.AirQuality;}),
-        max: d3.max(filtered_data, function(d) {return +d.AirQuality;})
+        minWorst: d3.min(filtered_worst, function(d) {return +d.AirQuality;}),
+        maxWorst: d3.max(filtered_worst, function(d) {return +d.AirQuality;}),
+        minBest: d3.min(filtered_best, function(d) {return +d.AirQuality;}),
+        maxBest: d3.max(filtered_best, function(d) {return +d.AirQuality;}),
+        minModerate: d3.min(filtered_moderate, function(d) {return +d.AirQuality;}),
+        maxModerate: d3.max(filtered_moderate, function(d) {return +d.AirQuality;})
     }
 
     let WaterPollution = {
-        min: d3.min(filtered_data, function(d) {return +d.WaterPollution;}),
-        max: d3.max(filtered_data, function(d) {return +d.WaterPollution;})
+        minWorst: d3.min(filtered_worst, function(d) {return +d.WaterPollution;}),
+        maxWorst: d3.max(filtered_worst, function(d) {return +d.WaterPollution;}),
+        minBest: d3.min(filtered_best, function(d) {return +d.WaterPollution;}),
+        maxBest: d3.max(filtered_best, function(d) {return +d.WaterPollution;}),
+        minModerate: d3.min(filtered_moderate, function(d) {return +d.WaterPollution;}),
+        maxModerate: d3.max(filtered_moderate, function(d) {return +d.WaterPollution;})
     }
 
     /*
@@ -56,11 +78,11 @@ d3.csv("./data/SgNumbers.csv").then(function(data) {
     */
 
     const xScale = d3.scaleLinear()
-        .domain([AirQuality.min, AirQuality.max])
+        .domain([AirQuality.minWorst, AirQuality.maxWorst])
         .range([margin.left, width-margin.right]); 
 
     const yScale = d3.scaleLinear()
-        .domain([WaterPollution.min, WaterPollution.max])
+        .domain([WaterPollution.minWorst, WaterPollution.maxWorst])
         .range([height-margin.bottom, margin.top]); 
 
     /* Draw Axes */
@@ -75,116 +97,43 @@ d3.csv("./data/SgNumbers.csv").then(function(data) {
     .attr("transform", `translate(${margin.left},0)`)
     .call(d3.axisLeft().scale(yScale));
 
-    //Draw colored rectangles for water quality 
-
-    const terribleWater = svg.append("rect")
-        .attr("x", margin.left)
-        .attr("y", yScale(100))
-        .attr("width", (width) - margin.left - margin.right)
-        .attr("height", yScale(80)-yScale(100))
-        .attr("fill", "#99130A")
-        .attr("opacity", 0.5);
-
-    const badWater = svg.append("rect")
-        .attr("x", margin.left)
-        .attr("y", yScale(80))
-        .attr("width", (width) - margin.left - margin.right)
-        .attr("height", yScale(60)-yScale(80))
-        .attr("fill", "#D31B0D")
-        .attr("opacity", 0.5);
-
-    const moderateWater = svg.append("rect")
-        .attr("x", margin.left)
-        .attr("y", yScale(60))
-        .attr("width", (width) - margin.left - margin.right)
-        .attr("height", yScale(40)-yScale(60))
-        .attr("fill", "#a48443")
-        .attr("opacity", 0.5);
-
-    const goodWater = svg.append("rect")
-        .attr("x", margin.left)
-        .attr("y", yScale(40))
-        .attr("width", (width) - margin.left - margin.right)
-        .attr("height", yScale(20)-yScale(40))
-        .attr("fill", "#6d8538")
-        .attr("opacity", 0.5);
-
-    const bestWater = svg.append("rect")
-        .attr("x", margin.left)
-        .attr("y", yScale(20))
-        .attr("width", (width) - margin.left - margin.right)
-        .attr("height", yScale(0)-yScale(20))
-        .attr("fill", "#79c153")
-        .attr("opacity", 0.5);
-
-    
-    /* Draw colored rectangles for air quality 
-
-    const bestAir = svg.append("rect")
-        .attr("x", xScale(80))
-        .attr("y", margin.top)
-        .attr("width", xScale(100)-xScale(80))
-        .attr("height", (height) - margin.top - margin.bottom)
-        .attr("fill", "#79c153")
-        .attr("opacity", 0.5);
-
-    const goodAir = svg.append("rect")
-        .attr("x", xScale(60))
-        .attr("y", margin.top)
-        .attr("width", xScale(80)-xScale(60))
-        .attr("height", (height) - margin.top - margin.bottom)
-        .attr("fill", "#6d8538")
-        .attr("opacity", 0.5);
-
-    const moderateAir = svg.append("rect")
-        .attr("x", xScale(40))
-        .attr("y", margin.top)
-        .attr("width", xScale(60)-xScale(40))
-        .attr("height", (height) - margin.top - margin.bottom)
-        .attr("fill", "#a48443")
-        .attr("opacity", 0.5);
-
-    const badAir = svg.append("rect")
-        .attr("x", xScale(20))
-        .attr("y", margin.top)
-        .attr("width", xScale(40)-xScale(20))
-        .attr("height", (height) - margin.top - margin.bottom)
-        .attr("fill", "#D31B0D")
-        .attr("opacity", 0.5);
-
-    const worstAir = svg.append("rect")
-        .attr("x", xScale(0))
-        .attr("y", margin.top)
-        .attr("width", xScale(20)-xScale(0))
-        .attr("height", (height) - margin.top - margin.bottom)
-        .attr("fill", "#99130A")
-        .attr("opacity", 0.5);
-
-    */
-
     /* Draw points */
 
-    const points = svg.selectAll("circle")
-    .data(filtered_data)
+    let points = svg.selectAll("circle")
+    .data(filtered_worst, function(d) { return d.category; })
     .enter()
     .append("circle")
         .attr("cx", function(d) {return xScale(d.AirQuality ); })
         .attr("cy", function(d) {return yScale(d.WaterPollution); })
         .attr("r", 8)   
-        .attr("fill", "#38062B")
+        .attr("fill", "#D31B0D")
         .attr("opacity", 0.2);
 
 
     /* AXES LABELS */
 
-    svg.append("text")
+    const xAxisLabel = svg.append("text")
         .attr("class","axisLabel")
         .attr("x", width/2 + 25)
         .attr("y", height - 100)
         .attr("text-anchor","middle")
         .text("Air Quality");
 
-    svg.append("text")
+    const xAxisLeft = svg.append("text")
+        .attr("class","axisScale")
+        .attr("x", width/2 - 700)
+        .attr("y", height - 100)
+        .attr("text-anchor","middle")
+        .text("Worst Quality");
+
+    const xAxisRight = svg.append("text")
+        .attr("class","axisScale")
+        .attr("x", width/2 + 750)
+        .attr("y", height - 100)
+        .attr("text-anchor","middle")
+        .text("Best Quality");
+
+    const yAxisLabel = svg.append("text")
         .attr("class","axisLabel")
         .attr("x", -height/2 + 45)
         .attr("y", 50)
@@ -192,15 +141,29 @@ d3.csv("./data/SgNumbers.csv").then(function(data) {
         .attr("transform","rotate(-90)")
         .text("Water Pollution");
 
+    const yAxisBottom = svg.append("text")
+        .attr("class","axisScale")
+        .attr("x", -height/2 - 250)
+        .attr("y", 50)
+        .attr("text-anchor","middle")
+        .attr("transform","rotate(-90)")
+        .text("Best Quality");
+
+    const yAxisTop = svg.append("text")
+        .attr("class","axisScale")
+        .attr("x", -height/2 + 350)
+        .attr("y", 50)
+        .attr("text-anchor","middle")
+        .attr("transform","rotate(-90)")
+        .text("Worst Quality");
+
     /*TOOLTIP*/ 
 
-    const tooltip = d3.select("#chart")
+    let tooltip = d3.select("#chart")
     .append("div")
     .attr("class", "tooltip");
 
-    points.on("mouseover", function (e,d) {
-
-        console.log(d);
+    svg.selectAll("circle").on("mouseover", function (e,d) {
 
         let cx = +d3.select(this).attr("cx");
         let cy = +d3.select(this).attr("cy");
@@ -208,10 +171,10 @@ d3.csv("./data/SgNumbers.csv").then(function(data) {
         tooltip.style("visibility", "visible")
         .style("left", `${cx}px`)
         .style("top", `${cy}px`)
-        .html(`<b>City</b>: ${d.City}<br> <b>Region</b>: ${d.Region}`);
+        .html(`<b>City</b>: ${d.City}<br> <b>Region</b>: ${d.Region}<br> <b>Country</b>: ${d.Country}`);
 
         d3.select(this)
-            .attr("stroke", "#EBEBEB")
+            .attr("stroke", "#38062B")
             .attr("stroke-width", 5);
 
     }).on("mouseout", function (){
@@ -221,35 +184,224 @@ d3.csv("./data/SgNumbers.csv").then(function(data) {
         d3.select(this)
             .attr("stroke", "none")
             .attr("stroke-width", 0);
-        })
-
-    /* FILTER BY CHECKBOX 
-    
-    Create checkboxes by categories: worst, best, and moderate. 
-
-    worst = highest overall pollution 
-
-    best = lowest overall pollution 
-
-    moderate = moderate pollution levels 
-
-    */
-
-    d3.selectAll(".pollution--level").on("click", function(){
-        let thisLevel = d3.select(this).property("value");
-        let isChecked = d3.select(this).property("checked");
-
-        let selection = points.filter(function(d){
-            return d.category === thisLevel; 
         });
 
-        if(isChecked == true) {
-            selection.attr("opacity", 0.5)
-                .attr("pointer-events", "all");
-        } else {
-            selection.attr("opacity", 0)
-                .attr("pointer-events", "none");
-        } 
-    })
+        /* 
+        UPDATE DATA, WITH TRANSITION
+        */
+
+        /* worst cities */ 
+
+        d3.select("#worstCities").on("click", function() {
+
+            xScale.domain([AirQuality.minWorst, AirQuality.maxWorst]);
+            yScale.domain([WaterPollution.minWorst, WaterPollution.maxWorst]);
+
+            let enterPoints = svg.selectAll("circle")
+                .data(filtered_worst, function(d) {return d.category; });
+
+            enterPoints.enter()
+                .append("circle")
+                .attr("cx", function(d) {return xScale(d.AirQuality); })
+                .attr("cy", function(d) {return yScale(d.WaterPollution); })
+                .attr("r", 8)   
+                .attr("fill", "#D31B0D")
+                .attr("opacity", 0.2)
+            .merge(enterPoints)
+                .transition()
+                .duration(2000)
+                .attr("cx", function(d) {return xScale(d.AirQuality); })
+                .attr("cy", function(d) {return yScale(d.WaterPollution); })
+                .attr("r", 8)   
+                .attr("fill", "#D31B0D")
+                .attr("opacity", 0.2)
+
+            enterPoints.exit()
+                .transition()
+                .duration(2000)
+                .attr("r", 0)
+                .remove(); 
+
+            xAxis.transition()
+                .duration(2000)
+                .call(d3.axisBottom().scale(xScale));
+
+            yAxis.transition()
+                .duration(2000)
+                .call(d3.axisLeft().scale(yScale));
+
+            /* update tooltip for worst cities */
+                
+            let tooltip = d3.select("#chart")
+                .append("div")
+                .attr("class", "tooltip");
+
+            svg.selectAll("circle").on("mouseover", function (e,d) {
+
+            let cx = +d3.select(this).attr("cx");
+            let cy = +d3.select(this).attr("cy");
+
+            tooltip.style("visibility", "visible")
+                .style("left", `${cx}px`)
+                .style("top", `${cy}px`)
+                .html(`<b>City</b>: ${d.City}<br> <b>Region</b>: ${d.Region}<br> <b>Country</b>: ${d.Country}`);
+
+            d3.select(this)
+                .attr("stroke", "#38062B")
+                .attr("stroke-width", 5);
+
+            }).on("mouseout", function (){
+
+            tooltip.style("visibility", "hidden");
+
+            d3.select(this)
+                .attr("stroke", "none")
+                .attr("stroke-width", 0);
+            });
+
+        });
+
+        /* best cities */
+
+        d3.select("#bestCities").on("click", function() {
+
+            xScale.domain([AirQuality.minBest, AirQuality.maxBest]);
+            yScale.domain([WaterPollution.minBest, WaterPollution.maxBest]);
+
+            let enterPoints = svg.selectAll("circle")
+                .data(filtered_best, function(d) { return d.category; });
+                
+            enterPoints.enter()
+                .append("circle")
+                .attr("cx", function(d) {return xScale(d.AirQuality); })
+                .attr("cy", function(d) {return yScale(d.WaterPollution); })
+                .attr("r", 8)   
+                .attr("fill", "#79c153")
+                .attr("opacity", 0.2)
+            .merge(enterPoints)
+                .transition()
+                .duration(2000)
+                .attr("cx", function(d) {return xScale(d.AirQuality); })
+                .attr("cy", function(d) {return yScale(d.WaterPollution); })
+                .attr("r", 8)   
+                .attr("fill", "#79c153")
+                .attr("opacity", 0.2)
+
+            enterPoints.exit()
+                .transition()
+                .duration(2000)
+                .attr("r", 0)
+                .remove();
+
+            xAxis.transition()
+                .duration(2000)
+                .call(d3.axisBottom().scale(xScale));
+
+            yAxis.transition()
+                .duration(2000)
+                .call(d3.axisLeft().scale(yScale));
+
+            /* update tooltip for best cities */
+
+            let tooltip = d3.select("#chart")
+                .append("div")
+                .attr("class", "tooltip");
+
+            svg.selectAll("circle").on("mouseover", function (e,d) {
+
+            let cx = +d3.select(this).attr("cx");
+            let cy = +d3.select(this).attr("cy");
+
+            tooltip.style("visibility", "visible")
+                .style("left", `${cx}px`)
+                .style("top", `${cy}px`)
+                .html(`<b>City</b>: ${d.City}<br> <b>Region</b>: ${d.Region}<br> <b>Country</b>: ${d.Country}`);
+
+            d3.select(this)
+                .attr("stroke", "#38062B")
+                .attr("stroke-width", 5);
+
+            }).on("mouseout", function (){
+
+            tooltip.style("visibility", "hidden");
+
+            d3.select(this)
+                .attr("stroke", "none")
+                .attr("stroke-width", 0);
+            });
+
+        });
+
+        /* moderate cities */
+
+        d3.select("#moderateCities").on("click", function() {
+
+            xScale.domain([AirQuality.minModerate, AirQuality.maxModerate]);
+            yScale.domain([WaterPollution.minModerate, WaterPollution.maxModerate]);
+
+            let enterPoints = svg.selectAll("circle")
+                .data(filtered_moderate, function(d) { return d.category; });
+                
+            enterPoints.enter()
+                .append("circle")
+                .attr("cx", function(d) {return xScale(d.AirQuality); })
+                .attr("cy", function(d) {return yScale(d.WaterPollution); })
+                .attr("r", 8)   
+                .attr("fill", "#a48443")
+                .attr("opacity", 0.2)
+            .merge(enterPoints)
+                .transition()
+                .duration(2000)
+                .attr("cx", function(d) {return xScale(d.AirQuality); })
+                .attr("cy", function(d) {return yScale(d.WaterPollution); })
+                .attr("r", 8)   
+                .attr("fill", "#a48443")
+                .attr("opacity", 0.2)
+
+            enterPoints.exit()
+                .transition()
+                .duration(2000)
+                .attr("r", 0)
+                .remove();
+
+            xAxis.transition()
+                .duration(2000)
+                .call(d3.axisBottom().scale(xScale));
+
+            yAxis.transition()
+                .duration(2000)
+                .call(d3.axisLeft().scale(yScale));
+
+            /* update tooltip for moderate cities */
+
+            let tooltip = d3.select("#chart")
+                .append("div")
+                .attr("class", "tooltip");
+
+            svg.selectAll("circle").on("mouseover", function (e,d) {
+
+            let cx = +d3.select(this).attr("cx");
+            let cy = +d3.select(this).attr("cy");
+
+            tooltip.style("visibility", "visible")
+                .style("left", `${cx}px`)
+                .style("top", `${cy}px`)
+                .html(`<b>City</b>: ${d.City}<br> <b>Region</b>: ${d.Region}<br> <b>Country</b>: ${d.Country}`);
+
+            d3.select(this)
+                .attr("stroke", "#38062B")
+                .attr("stroke-width", 5);
+
+            }).on("mouseout", function (){
+
+            tooltip.style("visibility", "hidden");
+
+            d3.select(this)
+                .attr("stroke", "none")
+                .attr("stroke-width", 0);
+            });
+            
+        });
+
 });
 
